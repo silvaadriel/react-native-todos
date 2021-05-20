@@ -11,18 +11,26 @@ interface Task {
 }
 
 export function Home() {
-  // const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   function handleAddTask(newTaskTitle: string) {
-    //TODO - add new task if it's not empty
+    if (!newTaskTitle) return;
+
+    const newTask: Task = {
+      id: new Date().getTime(),
+      title: newTaskTitle,
+      done: false
+    };
+
+    setTasks((previousTasks) => [...previousTasks, newTask]);
   }
 
   function handleMarkTaskAsDone(id: number) {
-    //TODO - mark task as done if exists
+    setTasks((previousTasks) => previousTasks.map((task) => (task.id === id ? { ...task, done: true } : task)));
   }
 
   function handleRemoveTask(id: number) {
-    //TODO - remove task from state
+    setTasks((previousTasks) => previousTasks.filter((task) => task.id !== id));
   }
 
   return (
@@ -31,11 +39,7 @@ export function Home() {
 
       <TodoInput addTask={handleAddTask} />
 
-      <MyTasksList 
-        tasks={tasks} 
-        onPress={handleMarkTaskAsDone} 
-        onLongPress={handleRemoveTask} 
-      />
+      <MyTasksList tasks={tasks} onPress={handleMarkTaskAsDone} onLongPress={handleRemoveTask} />
     </>
-  )
+  );
 }

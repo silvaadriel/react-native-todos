@@ -6,7 +6,7 @@ function FlatListHeaderComponent() {
     <View>
       <Text style={styles.header}>Minhas tasks</Text>
     </View>
-  )
+  );
 }
 
 interface MyTasksListProps {
@@ -23,25 +23,20 @@ export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
   return (
     <FlatList
       data={tasks}
-      keyExtractor={item => String(item.id)}
+      keyExtractor={(item) => String(item.id)}
       renderItem={({ item, index }) => {
         return (
           <TouchableOpacity
             testID={`button-${index}`}
             activeOpacity={0.7}
-            //TODO - use onPress, onLongPress and style props
+            onPress={() => onPress(item.id)}
+            onLongPress={() => onLongPress(item.id)}
+            style={item.done ? styles.taskButtonDone : styles.taskButton}
           >
-            <View 
-              testID={`marker-${index}`}
-              //TODO - use style prop 
-            />
-            <Text 
-              //TODO - use style prop
-            >
-              {item.title}
-            </Text>
+            <View testID={`marker-${index}`} style={item.done ? styles.taskMarkerDone : styles.taskMarker} />
+            <Text style={item.done ? styles.taskTextDone : styles.taskText}>{item.title}</Text>
           </TouchableOpacity>
-        )
+        );
       }}
       ListHeaderComponent={<FlatListHeaderComponent />}
       ListHeaderComponentStyle={{
@@ -52,7 +47,7 @@ export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
         marginTop: 32
       }}
     />
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -79,7 +74,7 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   taskText: {
-    color: '#3D3D4D',
+    color: '#3D3D4D'
   },
   taskButtonDone: {
     flex: 1,
@@ -102,4 +97,4 @@ const styles = StyleSheet.create({
     color: '#A09CB1',
     textDecorationLine: 'line-through'
   }
-})
+});
