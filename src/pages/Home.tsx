@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { Header } from '../components/Header';
 import { MyTasksList } from '../components/MyTasksList';
@@ -12,6 +13,7 @@ interface Task {
 
 export function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [darkMode, setDarkMode] = useState(false);
 
   function handleAddTask(newTaskTitle: string) {
     if (!newTaskTitle) return;
@@ -25,6 +27,10 @@ export function Home() {
     setTasks((previousTasks) => [...previousTasks, newTask]);
   }
 
+  function handleToggleDarkMode() {
+    setDarkMode((previousState) => !previousState);
+  }
+
   function handleMarkTaskAsDone(id: number) {
     setTasks((previousTasks) => previousTasks.map((task) => (task.id === id ? { ...task, done: true } : task)));
   }
@@ -34,12 +40,20 @@ export function Home() {
   }
 
   return (
-    <>
-      <Header />
+    <View style={styles(darkMode).container}>
+      <Header darkMode={darkMode} toggleDarkMode={handleToggleDarkMode} />
 
-      <TodoInput addTask={handleAddTask} />
+      <TodoInput addTask={handleAddTask} darkMode={darkMode} />
 
-      <MyTasksList tasks={tasks} onPress={handleMarkTaskAsDone} onLongPress={handleRemoveTask} />
-    </>
+      <MyTasksList tasks={tasks} darkMode={darkMode} onPress={handleMarkTaskAsDone} onLongPress={handleRemoveTask} />
+    </View>
   );
 }
+
+const styles = (darkMode: boolean) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? '#191D3A' : '#fff'
+    }
+  });

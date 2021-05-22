@@ -1,31 +1,48 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-export function Header() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>to.</Text>
-        <Text style={[styles.headerText, { fontFamily: 'Poppins-SemiBold' }]}>do</Text>
-      </View>
-    </SafeAreaView>
-  )
+import moonIcon from '../assets/icons/Moon.png';
+import sunIcon from '../assets/icons/Sun.png';
+
+interface HeaderProps {
+  toggleDarkMode: () => void;
+  darkMode: boolean;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#273FAD',
-  },
-  header: {
-    paddingBottom: 44,
-    backgroundColor: '#273FAD',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  headerText: {
-    fontSize: 24,
-    color: '#FFF',
-    fontFamily: 'Poppins-Regular',
-  }
-});
+export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
+  return (
+    <SafeAreaView style={styles(darkMode).container}>
+      <View style={styles(darkMode).header}>
+        <Text style={styles(darkMode).headerText}>to.</Text>
+        <Text style={[styles(darkMode).headerText, { fontFamily: 'Poppins-SemiBold' }]}>do</Text>
+        <TouchableOpacity style={styles(darkMode).toggleDarkModeButton} onPress={toggleDarkMode}>
+          {darkMode ? <Image source={sunIcon} /> : <Image source={moonIcon} />}
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = (darkMode: boolean) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: darkMode ? '#282B5A' : '#273FAD'
+    },
+    header: {
+      paddingBottom: 44,
+      backgroundColor: darkMode ? '#282B5A' : '#273FAD',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'row'
+    },
+    headerText: {
+      fontSize: 24,
+      color: darkMode ? '#E1E1E6' : '#FFF',
+      fontFamily: 'Poppins-Regular'
+    },
+    toggleDarkModeButton: {
+      position: 'absolute',
+      right: 15,
+      paddingVertical: 5
+    }
+  });
